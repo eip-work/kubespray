@@ -10,13 +10,8 @@
 - name: please wait
   debug:
     msg:
-      - "正在排空节点 {{ node }}，最长等候时间约 {{ drain_timeout }} * {{ drain_retries }} 次，请耐心等候"
-      - "{{ bin_dir }}/kubectl --kubeconfig {{ kube_config_dir }}/admin.conf drain"
-      - "--force"
-      - "--ignore-daemonsets"
-      - "--grace-period {{ drain_grace_period }}"
-      - "--timeout {{ drain_timeout }}"
-      - "--delete-emptydir-data {{ kube_override_hostname|default(inventory_hostname) }}"
+      - "在 {{ groups['kube_control_plane']|first }} 执行以下指令以排空节点 {{ inventory_hostname }}，最长等候时间约 ({{ drain_timeout }} + {{ drain_retry_delay_seconds }}s) * {{ drain_retries }} 次，请耐心等候。"
+      - "{{ bin_dir }}/kubectl --kubeconfig {{ kube_config_dir }}/admin.conf drain --force --ignore-daemonsets --grace-period {{ drain_grace_period }} --timeout {{ drain_timeout }} --delete-emptydir-data {{ kube_override_hostname|default(inventory_hostname) }}"
 
 - name: remove-node | Drain node except daemonsets resource  # noqa 301
   command: >-
