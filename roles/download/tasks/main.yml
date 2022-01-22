@@ -13,6 +13,7 @@
   when:
     - not skip_downloads|default(false)
     - container_manager in ['containerd', 'crio']
+    - kuboardspray_operation != 'install_addon'
 
 - name: install nerdctl
   import_role:
@@ -20,15 +21,28 @@
   when:
     - not skip_downloads|default(false)
     - container_manager in ['containerd']
+    - kuboardspray_operation != 'install_addon'
 
 - name: download | Get kubeadm binary and list of required images
   include_tasks: prep_kubeadm_images.yml
   when:
     - not skip_downloads|default(false)
     - inventory_hostname in groups['kube_control_plane']
+    - kuboardspray_operation != 'install_addon'
   tags:
     - download
     - upload
+
+- name: Set downloads
+  block:
+    - name: "disable downloads other than {{ kuboardspray_download_addon }}"
+      loop: "{{ downloads | dict2items }}"
+      set_fact:
+        downloads: "{{ downloads | combine( { item.key: download | combine({ 'enabled': [item.key] is subset(kuboardspray_download_addon) }) }) }}"
+      vars:
+        download: "{{ download_defaults | combine(item.value) }}"
+  when:
+    - kuboardspray_operation == 'install_addon'
 
 - name: download | Download files / images
   include_tasks: "{{ include_file }}"
