@@ -68,7 +68,7 @@
     retries: 4
     delay: "{{ retry_stagger | default(5) }}"
     environment: "{{ proxy_env }}"
-    no_log: true
+    no_log: "{{ kuboardspray_no_log }}"
 
   - name: download_file | Copy file back to ansible host file cache
     synchronize:
