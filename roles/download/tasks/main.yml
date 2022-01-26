@@ -33,6 +33,12 @@
     - download
     - upload
 
+- name: Add kuboard-spray extra downloads
+  block:
+    - name: "Add kuboard-spray extra downloads"
+      set_fact:
+        downloads: "{{ downloads | combine(kuboardspray_extra_downloads) }}"
+
 - name: Set downloads
   block:
     - name: "disable downloads other than {{ kuboardspray_download_addon }}"
