@@ -1,5 +1,5 @@
 ---
-- name: Kubernetes Apps | Register coredns deployment annotation `createdby`
+- name: "Kubernetes Apps | Register coredns deployment annotation `createdby` 此任务中，如果出现错误提示属于正常情况，请忽略"
   command: "{{ kubectl }} get deploy -n kube-system coredns -o jsonpath='{ .spec.template.metadata.annotations.createdby }'"
   register: createdby_annotation
   changed_when: false

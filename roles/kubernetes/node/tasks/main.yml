@@ -105,7 +105,7 @@
   tags:
     - kube-proxy
 
-- name: Modprobe nf_conntrack_ipv4
+- name: "Modprobe nf_conntrack_ipv4 此任务中，如果出现错误提示属于正常情况，请忽略"
   modprobe:
     name: nf_conntrack_ipv4
     state: present

@@ -1,6 +1,6 @@
 ---
 
-- name: Check which kube-control nodes are already members of the cluster
+- name: "Check which kube-control nodes are already members of the cluster 此任务中，如果出现错误提示属于正常情况，请忽略"
   command: "{{ bin_dir }}/kubectl get nodes --selector=node-role.kubernetes.io/control-plane -o json"
   register: kube_control_planes_raw
   ignore_errors: yes
