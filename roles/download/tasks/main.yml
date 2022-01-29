@@ -38,6 +38,9 @@
     - name: "Add kuboard-spray extra downloads"
       set_fact:
         downloads: "{{ downloads | combine(kuboardspray_extra_downloads) }}"
+  tags:
+    - download
+    - upload
 
 - name: Set downloads
   block:
@@ -49,6 +52,9 @@
         download: "{{ download_defaults | combine(item.value) }}"
   when:
     - kuboardspray_operation == 'install_addon'
+  tags:
+    - download
+    - upload
 
 - name: download | Download files / images
   include_tasks: "{{ include_file }}"
