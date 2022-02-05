@@ -1,5 +1,5 @@
 ---
-- name: kubeadm | Check api is up
+- name: kubeadm | Check api is up（需要 3-5 分钟）
   uri:
     url: "https://{{ ip | default(fallback_ips[inventory_hostname]) }}:{{ kube_apiserver_port }}/healthz"
     validate_certs: false
