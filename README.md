@@ -131,7 +131,7 @@ Note: Upstart/SysV init based OS types are not supported.
 ## Supported Components
 
 - Core
-  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.23.2
+  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.23.3
   - [etcd](https://github.com/etcd-io/etcd) v3.5.1
   - [docker](https://www.docker.com/) v20.10 (see note)
   - [containerd](https://containerd.io/) v1.5.9
@@ -151,7 +151,7 @@ Note: Upstart/SysV init based OS types are not supported.
   - [rbd-provisioner](https://github.com/kubernetes-incubator/external-storage) v2.1.1-k8s1.11
   - [cert-manager](https://github.com/jetstack/cert-manager) v1.6.1
   - [coredns](https://github.com/coredns/coredns) v1.8.6
-  - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v1.0.4
+  - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v1.1.1
 
 ## Container Runtime Notes
 
