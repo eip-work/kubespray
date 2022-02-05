@@ -15,7 +15,7 @@ is_fedora_coreos: false
 disable_swap: true
 
 ## Change this to use another Kubernetes version, e.g. a current beta release
-kube_version: v1.23.2
+kube_version: v1.23.3
 
 ## The minimum version working
 kube_version_min_required: v1.21.0
@@ -105,7 +105,7 @@ nodelocaldns_secondary_skew_seconds: 5
 # Should be set to a cluster IP if using a custom cluster DNS
 manual_dns_server: ""
 
-# Can be docker_dns, host_resolvconf or none
+# Can be host_resolvconf, docker_dns or none
 resolvconf_mode: host_resolvconf
 # Deploy netchecker app to verify DNS resolve as an HTTP service
 deploy_netchecker: false
@@ -358,6 +358,12 @@ containerd_use_systemd_cgroup: true
 #   - mirror.registry.io
 #   - 172.19.16.11:5000
 containerd_insecure_registries: []
+
+# Containerd conf default dir
+containerd_storage_dir: "/var/lib/containerd"
+containerd_state_dir: "/run/containerd"
+containerd_systemd_dir: "/etc/systemd/system/containerd.service.d"
+containerd_cfg_dir: "/etc/containerd"
 
 # Settings for containerized control plane (etcd/kubelet/secrets)
 # deployment type for legacy etcd mode
@@ -651,3 +657,9 @@ proxy_disable_env:
   http_proxy: ''
   https_proxy: ''
   no_proxy: ''
+
+# krew root dir
+krew_root_dir: "/usr/local/krew"
+
+# sysctl_file_path to add sysctl conf to
+sysctl_file_path: "/etc/sysctl.d/99-sysctl.conf"
