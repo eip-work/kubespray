@@ -60,8 +60,7 @@
     - ansible_os_family not in ['Suse', 'Flatcar', 'Flatcar Container Linux by Kinvolk', 'ClearLinux']
     - not ansible_distribution == "Fedora"
     - not is_fedora_coreos
-    - not ansible_distribution == "Rocky"
-    - not ansible_distribution == "openEuler"
+    - not ansible_distribution in ["Rocky", "openEuler", "Anolis"]
 
 # (2/3)
 - name: Assign inventory name to unconfigured hostnames (CoreOS, Flatcar, Suse, ClearLinux and Fedora only)
@@ -73,9 +72,7 @@
     override_system_hostname
     and (ansible_os_family in ['Suse', 'Flatcar', 'Flatcar Container Linux by Kinvolk', 'ClearLinux']
     or is_fedora_coreos
-    or ansible_distribution == "Rocky"
-    or ansible_distribution == "openEuler"
-    or ansible_distribution == "Fedora")
+    or ansible_distribution in ["Rocky", "openEuler", "Anolis"])
 
 # (3/3)
 - name: Update hostname fact (CoreOS, Flatcar, Suse, ClearLinux and Fedora only)
