@@ -1,4 +1,5 @@
 ---
+# 使用 roles/bootstrap-os 替代
 ## CentOS/RHEL/AlmaLinux specific variables
 # Use the fastestmirror yum plugin
 centos_fastestmirror_enabled: false

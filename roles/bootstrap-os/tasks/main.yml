@@ -1,4 +1,5 @@
 ---
+# 使用 roles/bootstrap-os 替代
 - name: Fetch /etc/os-release
   raw: cat /etc/os-release
   register: os_release
