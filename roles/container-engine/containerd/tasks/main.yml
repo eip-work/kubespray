@@ -9,6 +9,7 @@
   package:
     name: "{{ containerd_package }}"
     state: absent
+  ignore_errors: true
   when:
     - not (is_ostree or (ansible_distribution == "Flatcar Container Linux by Kinvolk") or (ansible_distribution == "Flatcar"))
 
