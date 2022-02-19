@@ -44,6 +44,20 @@
     image_save_command_on_localhost: "{{ docker_bin_dir }}/docker save {{ image_reponame }} | gzip -{{ download_compress }} > {{ image_path_cached }}"
   when: container_manager_on_localhost == 'docker'
 
+- name: Set image save/load command for docker on localhost
+  set_fact:
+    image_save_command_on_localhost: "{{ docker_bin_dir_on_localhost }}/docker save {{ image_reponame }} | gzip -{{ download_compress }} > {{ image_path_cached }}"
+  when:
+    - container_manager_on_localhost == 'docker'
+    - docker_bin_dir_on_localhost is defined
+
+- name: show image_save_command_on_localhost
+  debug:
+    msg: "{{ image_save_command_on_localhost }}"
+  when:
+    - container_manager_on_localhost == 'docker'
+    - docker_bin_dir_on_localhost is defined
+
 - name: Set image save/load command for containerd on localhost
   set_fact:
     image_save_command_on_localhost: "{{ containerd_bin_dir }}/ctr -n k8s.io image export --platform linux/{{ image_arch }} {{ image_path_cached }} {{ image_reponame }}"
