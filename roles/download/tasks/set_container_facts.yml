@@ -35,7 +35,7 @@
 
 - name: Set image save/load command for containerd
   set_fact:
-    image_load_command: "{{ bin_dir }}/nerdctl -n k8s.io image load --all-platform < {{ image_path_final }}"
+    image_load_command: "{{ bin_dir }}/nerdctl -n k8s.io image load --all-platforms < {{ image_path_final }}"
   when:
     - container_manager == 'containerd'
     - image_arch == 'arm64'
