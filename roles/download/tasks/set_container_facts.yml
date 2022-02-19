@@ -29,9 +29,16 @@
 
 - name: Set image save/load command for containerd
   set_fact:
-    image_save_command: "{{ bin_dir }}/nerdctl -n k8s.io image save -o {{ image_path_final }} {{ image_reponame }}"
-    image_load_command: "{{ bin_dir }}/nerdctl -n k8s.io image load --all-platforms < {{ image_path_final }}"
+    image_save_command: "{{ bin_dir }}/nerdctl -n k8s.io image save --platform linux/{{ image_arch }} -o {{ image_path_final }} {{ image_reponame }}"
+    image_load_command: "{{ bin_dir }}/nerdctl -n k8s.io image load --platform linux/{{ image_arch }} < {{ image_path_final }}"
   when: container_manager == 'containerd'
+
+- name: Set image save/load command for containerd
+  set_fact:
+    image_load_command: "{{ bin_dir }}/nerdctl -n k8s.io image load --all-platform < {{ image_path_final }}"
+  when:
+    - container_manager == 'containerd'
+    - image_arch == 'arm64'
 
 - name: Set image save/load command for crio
   set_fact:
@@ -51,13 +58,6 @@
     - container_manager_on_localhost == 'docker'
     - docker_bin_dir_on_localhost is defined
 
-- name: show image_save_command_on_localhost
-  debug:
-    msg: "{{ image_save_command_on_localhost }}"
-  when:
-    - container_manager_on_localhost == 'docker'
-    - docker_bin_dir_on_localhost is defined
-
 - name: Set image save/load command for containerd on localhost
   set_fact:
     image_save_command_on_localhost: "{{ containerd_bin_dir }}/ctr -n k8s.io image export --platform linux/{{ image_arch }} {{ image_path_cached }} {{ image_reponame }}"
@@ -67,3 +67,11 @@
   set_fact:
     image_save_command_on_localhost: "skopeo copy containers-storage:{{ image_reponame }} docker-archive:{{ image_path_final }}"
   when: container_manager_on_localhost == 'crio'
+
+- name: show image_save_command_on_localhost
+  debug:
+    msg:
+    - "image_save_command_on_localhost: {{ image_save_command_on_localhost }}"
+    - "image_load_command: {{ image_load_command }}"
+  when:
+    - http_proxy is defined and http_proxy != ''
