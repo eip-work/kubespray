@@ -15,7 +15,7 @@ is_fedora_coreos: false
 disable_swap: true
 
 ## Change this to use another Kubernetes version, e.g. a current beta release
-kube_version: v1.23.3
+kube_version: v1.23.6
 
 ## The minimum version working
 kube_version_min_required: v1.21.0
@@ -59,6 +59,8 @@ kube_proxy_nodeport_addresses: >-
 
 # Set to true to allow pre-checks to fail and continue deployment
 ignore_assert_errors: false
+
+kube_vip_enabled: false
 
 # nginx-proxy configure
 nginx_config_dir: "/etc/nginx"
@@ -132,7 +134,7 @@ enable_coredns_k8s_endpoint_pod_names: false
 # Kubernetes configuration dirs and system namespace.
 # Those are where all the additional config stuff goes
 # the kubernetes normally puts in /srv/kubernetes.
-# This puts them in a same location and namespace.
+# This puts them in a sane location and namespace.
 # Editing those values will almost surely break something.
 kube_config_dir: /etc/kubernetes
 kube_script_dir: "{{ bin_dir }}/kubernetes-scripts"
@@ -155,10 +157,16 @@ kube_token_dir: "{{ kube_config_dir }}/tokens"
 # cert files to. Not really changeable...
 kube_cert_group: kube-cert
 
+# Set to true when the CAs are managed externally.
+# When true, disables all tasks manipulating certificates. Ensure before the kubespray run that:
+# - Certificates and CAs are present in kube_cert_dir
+# - Kubeconfig files are present in kube_config_dir
+kube_external_ca_mode: false
+
 # Cluster Loglevel configuration
 kube_log_level: 2
 
-# Choose network plugin (cilium, calico, weave or flannel)
+# Choose network plugin (cilium, calico, kube-ovn, weave or flannel. Use cni for generic cni plugin)
 # Can also be set to 'cloud', which lets the cloud provider setup appropriate routing
 kube_network_plugin: calico
 kube_network_plugin_multus: false
@@ -258,10 +266,13 @@ kubelet_shutdown_grace_period: 60s
 kubelet_shutdown_grace_period_critical_pods: 20s
 
 # Whether to deploy the container engine
-deploy_container_engine: "{{ inventory_hostname in groups['k8s_cluster'] or etcd_deployment_type != 'host' }}"
+deploy_container_engine: "{{ inventory_hostname in groups['k8s_cluster'] or etcd_deployment_type == 'docker' }}"
 
 # Container for runtime
 container_manager: containerd
+
+# Enable CRI Docker interface
+cri_dockerd_enabled: false
 
 # Enable Kata Containers as additional container runtime
 # When enabled, it requires `container_manager` different than Docker
@@ -288,6 +299,8 @@ cri_socket: >-
   /var/run/crio/crio.sock
   {%- elif container_manager == 'containerd' -%}
   /var/run/containerd/containerd.sock
+  {%- elif cri_dockerd_enabled -%}
+  /var/run/cri-dockerd.sock
   {%- else -%}
   /var/run/dockershim.sock
   {%- endif -%}
@@ -344,9 +357,6 @@ docker_registry_mirrors: []
 ## Empty by default so no plugins will be installed.
 docker_plugins: []
 
-# Experimental kubeadm etcd deployment mode. Available only for new deployment
-etcd_kubeadm_enabled: false
-
 # Containerd options - thse are relevant when container_manager == 'containerd'
 containerd_use_systemd_cgroup: true
 
@@ -399,6 +409,7 @@ aws_ebs_csi_enabled: false
 azure_csi_enabled: false
 gcp_pd_csi_enabled: false
 vsphere_csi_enabled: false
+upcloud_csi_enabled: false
 csi_snapshot_controller_enabled: false
 persistent_volumes_enabled: false
 cephfs_provisioner_enabled: false
@@ -487,6 +498,11 @@ kubelet_protect_kernel_defaults: true
 ## List of key=value pairs that describe feature gates for
 ## the k8s cluster.
 kube_feature_gates: []
+kube_apiserver_feature_gates: []
+kube_controller_feature_gates: []
+kube_scheduler_feature_gates: []
+kube_proxy_feature_gates: []
+kubelet_feature_gates: []
 kubeadm_feature_gates: []
 
 # Local volume provisioner storage classes
@@ -611,6 +627,8 @@ etcd_events_data_dir: "/var/lib/etcd-events"
 etcd_cert_dir: "{{ etcd_config_dir }}/ssl"
 
 typha_enabled: false
+
+calico_apiserver_enabled: false
 
 _host_architecture_groups:
   x86_64: amd64

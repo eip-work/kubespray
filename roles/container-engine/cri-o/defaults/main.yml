@@ -38,11 +38,11 @@ crio_stream_port: "10010"
 crio_required_version: "{{ kube_version | regex_replace('^v(?P<major>\\d+).(?P<minor>\\d+).(?P<patch>\\d+)$', '\\g<major>.\\g<minor>') }}"
 
 crio_kubernetes_version_matrix:
-  "1.23": "1.22"
+  "1.23": "1.23"
   "1.22": "1.22"
   "1.21": "1.21"
 
-crio_version: "{{ crio_kubernetes_version_matrix[crio_required_version] | default('1.22') }}"
+crio_version: "{{ crio_kubernetes_version_matrix[crio_required_version] | default('1.23') }}"
 
 # The crio_runtimes variable defines a list of OCI compatible runtimes.
 crio_runtimes:
@@ -56,15 +56,11 @@ crio_runtimes:
 # surface and mitigating the consequences of containers breakout.
 kata_runtimes:
   # Kata Containers with the default configured VMM
-  - name: kata-runtime
-    path: /opt/kata/bin/kata-runtime
-    type: oci
-    root: /run/kata-containers
-  # Kata Containers with the QEMU VMM
   - name: kata-qemu
-    path: /opt/kata/bin/kata-qemu
-    type: oci
+    path: /usr/local/bin/containerd-shim-kata-qemu-v2
+    type: vm
     root: /run/kata-containers
+    privileged_without_host_devices: true
 
 # crun is a fast and low-memory footprint OCI Container Runtime fully written in C.
 crun_runtime:

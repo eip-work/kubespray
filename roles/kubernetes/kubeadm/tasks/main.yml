@@ -78,6 +78,7 @@
         --ignore-preflight-errors=DirAvailable--etc-kubernetes-manifests
         --skip-phases={{ kubeadm_join_phases_skip | join(',') }}
       register: kubeadm_join
+      changed_when: kubeadm_join is success
 
   rescue:
 
@@ -89,6 +90,7 @@
         --ignore-preflight-errors=all
         --skip-phases={{ kubeadm_join_phases_skip | join(',') }}
       register: kubeadm_join
+      changed_when: kubeadm_join is success
 
   always:
 
@@ -153,7 +155,7 @@
 - name: Extract etcd certs from control plane if using etcd kubeadm mode
   include_tasks: kubeadm_etcd_node.yml
   when:
-    - etcd_kubeadm_enabled
+    - etcd_deployment_type == "kubeadm"
     - inventory_hostname not in groups['kube_control_plane']
     - kube_network_plugin in ["calico", "flannel", "canal", "cilium"] or cilium_deploy_additionally | default(false) | bool
     - kube_network_plugin != "calico" or calico_datastore == "etcd"

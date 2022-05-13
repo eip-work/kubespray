@@ -16,10 +16,13 @@ else
   fi
 fi
 
+# needed for ara not to complain
+export TZ=UTC
 
 export ANSIBLE_REMOTE_USER=$SSH_USER
 export ANSIBLE_BECOME=true
 export ANSIBLE_BECOME_USER=root
+export ANSIBLE_CALLBACK_PLUGINS="$(python -m ara.setup.callback_plugins)"
 
 cd tests && make create-${CI_PLATFORM} -s ; cd -
 ansible-playbook tests/cloud_playbooks/wait-for-ssh.yml
@@ -104,6 +107,11 @@ if [ "${IDEMPOT_CHECK}" = "true" ]; then
     ## Idempotency checks 5/5 (Advanced DNS checks)
     ansible-playbook ${ANSIBLE_LOG_LEVEL} -e @${CI_TEST_SETTING} -e @${CI_TEST_REGISTRY_MIRROR} -e @${CI_TEST_VARS} ${CI_TEST_ADDITIONAL_VARS} --limit "all:!fake_hosts" tests/testcases/040_check-network-adv.yml
   fi
+fi
+
+# Test node removal procedure
+if [ "${REMOVE_NODE_CHECK}" = "true" ]; then
+  ansible-playbook ${ANSIBLE_LOG_LEVEL} -e @${CI_TEST_SETTING} -e @${CI_TEST_REGISTRY_MIRROR}  -e @${CI_TEST_VARS} ${CI_TEST_ADDITIONAL_VARS} -e skip_confirmation=yes -e node=${REMOVE_NODE_NAME} --limit "all:!fake_hosts" remove-node.yml
 fi
 
 # Clean up at the end, this is to allow stage1 tests to include cleanup test

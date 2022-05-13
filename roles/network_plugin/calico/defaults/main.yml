@@ -1,4 +1,7 @@
 ---
+# the default value of name
+calico_cni_name: k8s-pod-network
+
 # Enables Internet connectivity from containers
 nat_outgoing: true
 
@@ -6,15 +9,17 @@ nat_outgoing: true
 calico_pool_name: "default-pool"
 calico_ipv4pool_ipip: "Off"
 
-# Use IP-over-IP encapsulation across hosts
-ipip: true
-ipip_mode: "{{ 'Always' if ipip else 'Never' }}"  # change to "CrossSubnet" if you only want ipip encapsulation on traffic going across subnets
-calico_ipip_mode: "{{ ipip_mode }}"
-calico_vxlan_mode: 'Never'
+# Change encapsulation mode, by default we enable vxlan which is the most mature and well tested mode
+calico_ipip_mode: Never  # valid values are 'Always', 'Never' and 'CrossSubnet'
+calico_vxlan_mode: Always  # valid values are 'Always', 'Never' and 'CrossSubnet'
 
+# Calico doesn't support ipip tunneling for the IPv6.
 calico_ipip_mode_ipv6: Never
 calico_vxlan_mode_ipv6: Never
 calico_pool_blocksize_ipv6: 116
+
+# Calico network backend can be 'bird', 'vxlan' and 'none'
+calico_network_backend: vxlan
 
 calico_cert_dir: /etc/calico/certs
 
@@ -127,3 +132,9 @@ calico_felix_log_severity_screen: Info
 
 # Calico container settings
 calico_allow_ip_forwarding: false
+
+# Calico IPAM strictaffinity
+calico_ipam_strictaffinity: false
+
+# Calico apiserver (only with kdd)
+calico_apiserver_enabled: false
