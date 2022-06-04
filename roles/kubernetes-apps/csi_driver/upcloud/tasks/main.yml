@@ -3,7 +3,6 @@
   fail:
     msg: "UpCloud username is missing. Env UPCLOUD_USERNAME is mandatory"
   when: upcloud_username is not defined or not upcloud_username
-  tags: upcloud-csi-driver
 
 - name: UpCloud CSI Driver | Check if UPCLOUD_PASSWORD exists
   fail:
@@ -12,12 +11,12 @@
     - upcloud_username is defined
     - upcloud_username|length > 0
     - upcloud_password is not defined or not upcloud_password
-  tags: upcloud-csi-driver
 
 - name: UpCloud CSI Driver | Generate Manifests
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kube_config_dir }}/{{ item.file }}"
+    mode: 0644
   with_items:
     - {name: upcloud-csi-cred-secret, file: upcloud-csi-cred-secret.yml}
     - {name: upcloud-csi-setup, file: upcloud-csi-setup.yml}
@@ -26,7 +25,6 @@
     - {name: upcloud-csi-driver, file: upcloud-csi-driver.yml}
   register: upcloud_csi_manifests
   when: inventory_hostname == groups['kube_control_plane'][0]
-  tags: upcloud-csi-driver
 
 - name: UpCloud CSI Driver | Apply Manifests
   kube:
@@ -40,4 +38,3 @@
     - not item is skipped
   loop_control:
     label: "{{ item.item.file }}"
-  tags: upcloud-csi-driver

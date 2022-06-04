@@ -13,6 +13,9 @@ calico_ipv4pool_ipip: "Off"
 calico_ipip_mode: Never  # valid values are 'Always', 'Never' and 'CrossSubnet'
 calico_vxlan_mode: Always  # valid values are 'Always', 'Never' and 'CrossSubnet'
 
+calico_cni_pool: true
+calico_cni_pool_ipv6: true
+
 # Calico doesn't support ipip tunneling for the IPv6.
 calico_ipip_mode_ipv6: Never
 calico_vxlan_mode_ipv6: Never
@@ -133,8 +136,14 @@ calico_felix_log_severity_screen: Info
 # Calico container settings
 calico_allow_ip_forwarding: false
 
-# Calico IPAM strictaffinity
+# Calico IPAM strictAffinity
 calico_ipam_strictaffinity: false
+
+# Calico IPAM autoAllocateBlocks
+calcio_ipam_autoallocateblocks: true
+
+# Calico IPAM maxBlocksPerHost, default 0
+calico_ipam_maxblocksperhost: 0
 
 # Calico apiserver (only with kdd)
 calico_apiserver_enabled: false
