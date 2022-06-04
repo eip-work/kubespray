@@ -52,6 +52,9 @@ local_volume_provisioner_enabled: false
 #       - "2"
 #     volume_mode: Filesystem
 #     fs_type: ext4
+# local_volume_provisioner_tolerations:
+#   - effect: NoSchedule
+#     operator: Exists
 
 # CSI Volume Snapshot Controller deployment, set this to true if your CSI is able to manage snapshots
 # currently, setting cinder_csi_enabled=true would automatically enable the snapshot controller
@@ -185,7 +188,7 @@ metallb_speaker_enabled: true
 #     operator: "Equal"
 #     value: ""
 #     effect: "NoSchedule"
-# metallb_version: v0.11.0
+# metallb_version: v0.12.1
 # metallb_protocol: "layer2"
 # metallb_port: "7472"
 # metallb_memberlist_port: "7946"

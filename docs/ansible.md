@@ -13,7 +13,7 @@ the _etcd_ group into the _k8s_cluster_, unless you are certain
 to do that and you have it fully contained in the latter:
 
 ```ShellSession
-k8s_cluster ⊂ etcd => kube_node ∩ etcd = etcd
+etcd ⊂ k8s_cluster => kube_node ∩ etcd = etcd
 ```
 
 When _kube_node_ contains _etcd_, you define your etcd cluster to be as well schedulable for Kubernetes workloads.
@@ -156,6 +156,7 @@ The following tags are defined in playbooks:
 |                        kubeadm | Roles linked to kubeadm tasks
 |                 kube-apiserver | Configuring static pod kube-apiserver
 |        kube-controller-manager | Configuring static pod kube-controller-manager
+|                       kube-vip | Installing and configuring kube-vip
 |                        kubectl | Installing kubectl and bash completion
 |                        kubelet | Configuring kubelet service
 |                       kube-ovn | Network plugin kube-ovn
@@ -267,7 +268,7 @@ that explains in detail the need and the evolution plan.
 You first need to uninstall your old ansible (pre 2.10) version and install the new one.
 
 ```ShellSession
-pip uninstall ansible
+pip uninstall ansible ansible-base ansible-core
 cd kubespray/
 pip install -U .
 ```
