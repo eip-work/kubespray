@@ -1,4 +1,5 @@
 ---
+# 使用 roles/bootstrap-os 替代
 # ClearLinux ships with Python installed
 
 - name: Install basic package to run containers

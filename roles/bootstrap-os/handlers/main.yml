@@ -1,4 +1,5 @@
 ---
+# 使用 roles/bootstrap-os 替代
 - name: RHEL auto-attach subscription
   command: /sbin/subscription-manager attach --auto
   become: true

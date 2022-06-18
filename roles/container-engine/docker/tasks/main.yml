@@ -11,25 +11,24 @@
   set_fact:
     is_ostree: "{{ ostree.stat.exists }}"
 
-- name: gather os specific variables
-  include_vars: "{{ item }}"
-  with_first_found:
-    - files:
-        - "{{ ansible_distribution|lower }}-{{ ansible_distribution_version|lower|replace('/', '_') }}.yml"
-        - "{{ ansible_distribution|lower }}-{{ ansible_distribution_release|lower }}-{{ host_architecture }}.yml"
-        - "{{ ansible_distribution|lower }}-{{ ansible_distribution_release|lower }}.yml"
-        - "{{ ansible_distribution|lower }}-{{ ansible_distribution_major_version|lower|replace('/', '_') }}.yml"
-        - "{{ ansible_distribution|lower }}-{{ host_architecture }}.yml"
-        - "{{ ansible_distribution|lower }}.yml"
-        - "{{ ansible_os_family|lower }}-{{ ansible_distribution_major_version|lower|replace('/', '_') }}.yml"
-        - "{{ ansible_os_family|lower }}-{{ host_architecture }}.yml"
-        - "{{ ansible_os_family|lower }}.yml"
-        - defaults.yml
-      paths:
-        - ../vars
-      skip: true
-  tags:
-    - facts
+# - name: gather os specific variables
+#   include_vars: "{{ item }}"
+#   with_first_found:
+#     - files:
+#         - "{{ ansible_distribution|lower }}-{{ ansible_distribution_version|lower|replace('/', '_') }}.yml"
+#         - "{{ ansible_distribution|lower }}-{{ ansible_distribution_release|lower }}-{{ host_architecture }}.yml"
+#         - "{{ ansible_distribution|lower }}-{{ ansible_distribution_release|lower }}.yml"
+#         - "{{ ansible_distribution|lower }}-{{ ansible_distribution_major_version|lower|replace('/', '_') }}.yml"
+#         - "{{ ansible_distribution|lower }}-{{ host_architecture }}.yml"
+#         - "{{ ansible_distribution|lower }}.yml"
+#         - "{{ ansible_os_family|lower }}-{{ host_architecture }}.yml"
+#         - "{{ ansible_os_family|lower }}.yml"
+#         - defaults.yml
+#       paths:
+#         - ../vars
+#       skip: true
+#   tags:
+#     - facts
 
 - name: Warn about Docker version on SUSE
   debug:
@@ -41,44 +40,44 @@
   tags:
     - facts
 
-- import_tasks: pre-upgrade.yml
+# - import_tasks: pre-upgrade.yml
 
-- name: ensure docker-ce repository public key is installed
-  apt_key:
-    id: "{{ item }}"
-    url: "{{ docker_repo_key_info.url }}"
-    state: present
-  register: keyserver_task_result
-  until: keyserver_task_result is succeeded
-  retries: 4
-  delay: "{{ retry_stagger | d(3) }}"
-  with_items: "{{ docker_repo_key_info.repo_keys }}"
-  environment: "{{ proxy_env }}"
-  when: ansible_pkg_mgr == 'apt'
+# - name: ensure docker-ce repository public key is installed
+#   apt_key:
+#     id: "{{ item }}"
+#     url: "{{ docker_repo_key_info.url }}"
+#     state: present
+#   register: keyserver_task_result
+#   until: keyserver_task_result is succeeded
+#   retries: 4
+#   delay: "{{ retry_stagger | d(3) }}"
+#   with_items: "{{ docker_repo_key_info.repo_keys }}"
+#   environment: "{{ proxy_env }}"
+#   when: ansible_pkg_mgr == 'apt'
 
-- name: ensure docker-ce repository is enabled
-  apt_repository:
-    repo: "{{ item }}"
-    state: present
-  with_items: "{{ docker_repo_info.repos }}"
-  when: ansible_pkg_mgr == 'apt'
+# - name: ensure docker-ce repository is enabled
+#   apt_repository:
+#     repo: "{{ item }}"
+#     state: present
+#   with_items: "{{ docker_repo_info.repos }}"
+#   when: ansible_pkg_mgr == 'apt'
 
-- name: Configure docker repository on Fedora
-  template:
-    src: "fedora_docker.repo.j2"
-    dest: "{{ yum_repo_dir }}/docker.repo"
-    mode: 0644
-  when: ansible_distribution == "Fedora" and not is_ostree
+# - name: Configure docker repository on Fedora
+#   template:
+#     src: "fedora_docker.repo.j2"
+#     dest: "{{ yum_repo_dir }}/docker.repo"
+#     mode: 0644
+#   when: ansible_distribution == "Fedora" and not is_ostree
 
-- name: Configure docker repository on RedHat/CentOS/Oracle/AlmaLinux Linux
-  template:
-    src: "rh_docker.repo.j2"
-    dest: "{{ yum_repo_dir }}/docker-ce.repo"
-    mode: 0644
-  when:
-    - ansible_os_family == "RedHat"
-    - ansible_distribution != "Fedora"
-    - not is_ostree
+# - name: Configure docker repository on Anolis/openEuler/Rocky/RedHat/CentOS/Oracle/AlmaLinux Linux
+#   template:
+#     src: "rh_docker.repo.j2"
+#     dest: "{{ yum_repo_dir }}/docker-ce.repo"
+#     mode: 0644
+#   when:
+#     - ansible_os_family in ["Anolis", "openEuler", "OracleLinux", "Rocky", "RedHat"]
+#     - ansible_distribution != "Fedora"
+#     - not is_ostree
 
 - name: Remove dpkg hold
   dpkg_selections:

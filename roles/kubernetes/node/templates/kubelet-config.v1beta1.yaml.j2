@@ -118,7 +118,7 @@ tlsCipherSuites:
 - {{ tls }}
 {% endfor %}
 {% endif %}
-{% if kubelet_event_record_qps %}
+{% if kubelet_event_record_qps is defined %}
 eventRecordQPS: {{ kubelet_event_record_qps }}
 {% endif %}
 shutdownGracePeriod: {{ kubelet_shutdown_grace_period }}

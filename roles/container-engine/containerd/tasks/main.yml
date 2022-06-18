@@ -3,12 +3,13 @@
   fail:
     msg: "{{ ansible_distribution }} is not supported by containerd."
   when:
-    - ansible_distribution not in ["CentOS", "OracleLinux", "RedHat", "Ubuntu", "Debian", "Fedora", "AlmaLinux", "Rocky", "Amazon", "Flatcar", "Flatcar Container Linux by Kinvolk", "Suse", "openSUSE Leap", "openSUSE Tumbleweed"]
+    - ansible_distribution not in ["Kylin Linux Advanced Server", "Anolis", "OracleLinux", "openEuler", "CentOS", "OracleLinux", "RedHat", "Ubuntu", "Debian", "Fedora", "AlmaLinux", "Rocky", "Amazon", "Flatcar", "Flatcar Container Linux by Kinvolk", "Suse", "openSUSE Leap", "openSUSE Tumbleweed"]
 
 - name: containerd | Remove any package manager controlled containerd package
   package:
     name: "{{ containerd_package }}"
     state: absent
+  ignore_errors: true
   when:
     - not (is_ostree or (ansible_distribution == "Flatcar Container Linux by Kinvolk") or (ansible_distribution == "Flatcar"))
 

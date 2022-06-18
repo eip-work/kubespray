@@ -4,7 +4,7 @@
     ca_cert_path: |-
       {% if ansible_os_family == "Debian" -%}
       /usr/local/share/ca-certificates/etcd-ca.crt
-      {%- elif ansible_os_family == "RedHat" -%}
+      {%- elif ansible_os_family in ["RedHat", "Rocky", "Anolis", "OracleLinux", "Kylin Linux Advanced Server"] -%}
       /etc/pki/ca-trust/source/anchors/etcd-ca.crt
       {%- elif ansible_os_family in ["Flatcar", "Flatcar Container Linux by Kinvolk"] -%}
       /etc/ssl/certs/etcd-ca.pem
@@ -30,7 +30,7 @@
 
 - name: Gen_certs | update ca-certificates (RedHat)  # noqa 503
   command: update-ca-trust extract
-  when: etcd_ca_cert.changed and ansible_os_family == "RedHat"
+  when: etcd_ca_cert.changed and ansible_os_family in ["RedHat", "Rocky"]
 
 - name: Gen_certs | update ca-certificates (ClearLinux)  # noqa 503
   command: clrtrust add "{{ ca_cert_path }}"
