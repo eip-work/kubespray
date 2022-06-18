@@ -83,6 +83,7 @@
       synchronize:
         src: "{{ image_path_final }}"
         dest: "{{ image_path_cached }}"
+        use_ssh_args: true
         ssh_args: "{{ ansible_ssh_args }} {{ ansible_ssh_common_args }}"
         mode: pull
       when:
@@ -95,6 +96,7 @@
       synchronize:
         src: "{{ image_path_cached }}"
         dest: "{{ image_path_final }}"
+        use_ssh_args: true
         ssh_args: "{{ ansible_ssh_args }} {{ ansible_ssh_common_args }}"
         mode: push
       delegate_facts: no
