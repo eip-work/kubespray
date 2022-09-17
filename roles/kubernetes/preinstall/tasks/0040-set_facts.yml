@@ -153,7 +153,7 @@
     dhclienthookfile: /etc/dhcp/dhclient.d/zdnsupdate.sh
   # when: ansible_os_family == "RedHat"
   when:
-    - ansible_distribution in ["CentOS","Anolis","OracleLinux","Rocky","openEuler","Kylin Linux Advanced Server",]
+    - ansible_distribution in ["CentOS","Anolis","OracleLinux","Rocky","openEuler","Kylin Linux Advanced Server","UnionTech OS Server 20"]
 
 - name: target dhclient hook file for Debian family
   set_fact:
