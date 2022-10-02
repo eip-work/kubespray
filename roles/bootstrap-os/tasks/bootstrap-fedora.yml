@@ -1,4 +1,5 @@
 ---
+# 使用 roles/bootstrap-os 替代
 # Some Fedora based distros ship without Python installed
 
 - name: Check if bootstrap is needed

@@ -1,4 +1,5 @@
 #!/bin/bash
+# 使用 roles/bootstrap-os 替代
 set -e
 
 BINDIR="/opt/bin"

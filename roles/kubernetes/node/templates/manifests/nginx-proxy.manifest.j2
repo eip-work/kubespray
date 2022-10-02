@@ -18,6 +18,9 @@ spec:
   - name: nginx-proxy
     image: {{ nginx_image_repo }}:{{ nginx_image_tag }}
     imagePullPolicy: {{ k8s_image_pull_policy }}
+    env:
+      - name: Kuboardspray_Restart_Random
+        value: "{{ 10000 | random }}"
     resources:
       requests:
         cpu: {{ loadbalancer_apiserver_cpu_requests }}
