@@ -24,7 +24,7 @@
 
 - name: Stop if unknown OS
   assert:
-    that: ansible_distribution in ['UnionTech OS Server 20', 'Kylin Linux Advanced Server', 'Anolis', 'openEuler', "OracleLinux", 'RedHat', 'CentOS', 'Fedora', 'Ubuntu', 'Debian', 'Flatcar', 'Flatcar Container Linux by Kinvolk', 'Suse', 'openSUSE Leap', 'ClearLinux', 'OracleLinux', 'AlmaLinux', 'Rocky', 'Amazon']
+    that: ansible_distribution in ['RedHat', 'CentOS', 'Fedora', 'Ubuntu', 'Debian', 'Flatcar', 'Flatcar Container Linux by Kinvolk', 'Suse', 'openSUSE Leap', 'openSUSE Tumbleweed', 'ClearLinux', 'OracleLinux', 'AlmaLinux', 'Rocky', 'Amazon', 'Kylin Linux Advanced Server', 'UnionTech OS Server 20', 'Anolis', 'openEuler' ]
     msg: "{{ ansible_distribution }} is not a known OS"
   when: not ignore_assert_errors
 
@@ -99,6 +99,20 @@
   when:
     - not ignore_assert_errors
     - ip is defined
+
+- name: Ensure ping package
+  package:
+    name: >-
+          {%- if ansible_os_family in ['RedHat', 'Suse'] -%}
+          iputils
+          {%- else -%}
+          iputils-ping
+          {%- endif -%}
+    state: present
+  when:
+    - access_ip is defined
+    - not ignore_assert_errors
+    - ping_access_ip
 
 - name: Stop if access_ip is not pingable
   command: ping -c1 {{ access_ip }}

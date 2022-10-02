@@ -11,6 +11,7 @@
   set_fact:
     is_ostree: "{{ ostree.stat.exists }}"
 
+
 # - name: gather os specific variables
 #   include_vars: "{{ item }}"
 #   with_first_found:
@@ -29,6 +30,7 @@
 #       skip: true
 #   tags:
 #     - facts
+
 
 - name: Warn about Docker version on SUSE
   debug:
@@ -69,7 +71,7 @@
 #     mode: 0644
 #   when: ansible_distribution == "Fedora" and not is_ostree
 
-# - name: Configure docker repository on Anolis/openEuler/Rocky/RedHat/CentOS/Oracle/AlmaLinux Linux
+# - name: Configure docker repository on Anolis/openEuler/Rocky/RedHat/CentOS/Oracle/AlmaLinux/KylinLinux
 #   template:
 #     src: "rh_docker.repo.j2"
 #     dest: "{{ yum_repo_dir }}/docker-ce.repo"

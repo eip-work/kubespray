@@ -74,6 +74,7 @@
   #     loop_var: mirror
   #   ignore_errors: true
 
+
   # Ansible 2.9 requires we convert a generator to a list
   # - name: download_file | Get the list of working mirrors
   #   set_fact:
@@ -101,7 +102,7 @@
     retries: 4
     delay: "{{ retry_stagger | default(5) }}"
     environment: "{{ proxy_env }}"
-    no_log: "{{ kuboardspray_no_log }}"
+    no_log: "{{ not (unsafe_show_logs|bool) }}"
 
   - name: download_file | Copy file back to ansible host file cache
     synchronize:

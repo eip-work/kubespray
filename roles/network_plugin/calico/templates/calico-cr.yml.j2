@@ -158,3 +158,11 @@ rules:
     verbs:
       - get
 {% endif %}
+  # Used for creating service account tokens to be used by the CNI plugin
+  - apiGroups: [""]
+    resources:
+      - serviceaccounts/token
+    resourceNames:
+      - calico-node
+    verbs:
+      - create

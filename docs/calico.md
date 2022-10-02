@@ -72,9 +72,14 @@ calico_pool_cidr_ipv6: fd85:ee78:d8a6:8607::1:0000/112
 
 In some cases you may want to route the pods subnet and so NAT is not needed on the nodes.
 For instance if you have a cluster spread on different locations and you want your pods to talk each other no matter where they are located.
-The following variables need to be set:
-`peer_with_router` to enable the peering with the datacenter's border router (default value: false).
-you'll need to edit the inventory and add a hostvar `local_as` by node.
+The following variables need to be set as follow:
+
+```yml
+peer_with_router: true  # enable the peering with the datacenter's border router (default value: false).
+nat_outgoing: false  # (optional) NAT outgoing (default value: true).
+```
+
+And you'll need to edit the inventory and add a hostvar `local_as` by node.
 
 ```ShellSession
 node1 ansible_ssh_host=95.54.0.12 local_as=xxxxxx
@@ -124,8 +129,7 @@ You need to edit your inventory and add:
 * `calico_rr` group with nodes in it. `calico_rr` can be combined with
   `kube_node` and/or `kube_control_plane`. `calico_rr` group also must be a child
    group of `k8s_cluster` group.
-* `cluster_id` by route reflector node/group (see details
-[here](https://hub.docker.com/r/calico/routereflector/))
+* `cluster_id` by route reflector node/group (see details [here](https://hub.docker.com/r/calico/routereflector/))
 
 Here's an example of Kubespray inventory with standalone route reflectors:
 
@@ -172,6 +176,8 @@ node5
 
 [rack0:vars]
 cluster_id="1.0.0.1"
+calico_rr_id=rr1
+calico_group_id=rr1
 ```
 
 The inventory above will deploy the following topology assuming that calico's
@@ -212,7 +218,7 @@ calico_node_readinessprobe_timeout: 10
 
 Calico supports two types of encapsulation: [VXLAN and IP in IP](https://docs.projectcalico.org/v3.11/networking/vxlan-ipip). VXLAN is the more mature implementation and enabled by default, please check your environment if you need *IP in IP* encapsulation.
 
-*IP in IP* and *VXLAN* is mutualy exclusive modes.
+*IP in IP* and *VXLAN* is mutually exclusive modes.
 
 Kubespray defaults have changed after version 2.18 from auto-enabling `ipip` mode to auto-enabling `vxlan`. This was done to facilitate wider deployment scenarios including those where vxlan acceleration is provided by the underlying network devices.
 
@@ -245,14 +251,14 @@ calico_network_backend: 'bird'
 
 If you would like to migrate from the old IP in IP with `bird` network backends default to the new VXLAN based encapsulation you need to perform this change before running an upgrade of your cluster; the `cluster.yml` and `upgrade-cluster.yml` playbooks will refuse to continue if they detect incompatible settings.
 
-Execute the following sters on one of the control plane nodes, ensure the cluster in healthy before proceeding.
+Execute the following steps on one of the control plane nodes, ensure the cluster in healthy before proceeding.
 
 ```shell
 calicoctl.sh patch felixconfig default -p '{"spec":{"vxlanEnabled":true}}'
 calicoctl.sh patch ippool default-pool -p '{"spec":{"ipipMode":"Never", "vxlanMode":"Always"}}'
 ```
 
-**Note:** if you created multiple ippools you will need to patch all of them individually to change their encapsulation. The kubespray playbooks only handle the default ippool creaded by kubespray.
+**Note:** if you created multiple ippools you will need to patch all of them individually to change their encapsulation. The kubespray playbooks only handle the default ippool created by kubespray.
 
 Wait for the `vxlan.calico` interfaces to be created on all cluster nodes and traffic to be routed through it then you can disable `ipip`.
 
@@ -369,7 +375,7 @@ use_localhost_as_kubeapi_loadbalancer: true
 
 ### Tunneled versus Direct Server Return
 
-By default Calico usese Tunneled service mode but it can use direct server return (DSR) in order to optimize the return path for a service.
+By default Calico uses Tunneled service mode but it can use direct server return (DSR) in order to optimize the return path for a service.
 
 To configure DSR:
 
@@ -395,7 +401,7 @@ Please see [Calico eBPF troubleshooting guide](https://docs.projectcalico.org/ma
 
 ## Wireguard Encryption
 
-Calico supports using Wireguard for encryption. Please see the docs on [encryptiong cluster pod traffic](https://docs.projectcalico.org/security/encrypt-cluster-pod-traffic).
+Calico supports using Wireguard for encryption. Please see the docs on [encrypt cluster pod traffic](https://docs.projectcalico.org/security/encrypt-cluster-pod-traffic).
 
 To enable wireguard support:
 

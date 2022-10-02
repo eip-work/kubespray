@@ -15,10 +15,10 @@ is_fedora_coreos: false
 disable_swap: true
 
 ## Change this to use another Kubernetes version, e.g. a current beta release
-kube_version: v1.24.2
+kube_version: v1.24.6
 
 ## The minimum version working
-kube_version_min_required: v1.22.0
+kube_version_min_required: v1.23.0
 
 ## Kube Proxy mode One of ['iptables','ipvs']
 kube_proxy_mode: ipvs
@@ -440,6 +440,8 @@ openstack_cacert: "{{ lookup('env','OS_CACERT') }}"
 
 # Default values for the external OpenStack Cloud Controller
 external_openstack_enable_ingress_hostname: false
+external_openstack_ingress_hostname_suffix: "nip.io"
+external_openstack_max_shared_lb: 2
 external_openstack_lbaas_create_monitor: false
 external_openstack_lbaas_monitor_delay: "1m"
 external_openstack_lbaas_monitor_timeout: "30s"
@@ -474,7 +476,7 @@ rbac_enabled: "{{ 'RBAC' in authorization_modes }}"
 kubelet_authentication_token_webhook: true
 
 # When enabled, access to the kubelet API requires authorization by delegation to the API server
-kubelet_authorization_mode_webhook: true
+kubelet_authorization_mode_webhook: false
 
 # kubelet uses certificates for authenticating to the Kubernetes API
 # Automatically generate a new key and request a new certificate from the Kubernetes API as the current certificate approaches expiration

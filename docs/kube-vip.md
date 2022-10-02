@@ -2,6 +2,14 @@
 
 kube-vip provides Kubernetes clusters with a virtual IP and load balancer for both the control plane (for building a highly-available cluster) and Kubernetes Services of type LoadBalancer without relying on any external hardware or software.
 
+## Prerequisites
+
+You have to configure `kube_proxy_strict_arp` when the kube_proxy_mode is `ipvs` and kube-vip ARP is enabled.
+
+```yaml
+kube_proxy_strict_arp: true
+```
+
 ## Install
 
 You have to explicitly enable the kube-vip extension:
@@ -11,7 +19,7 @@ kube_vip_enabled: true
 ```
 
 You also need to enable
-[kube-vip as HA, Load Balancer, or both](https://kube-vip.chipzoller.dev/docs/installation/static/#kube-vip-as-ha-load-balancer-or-both):
+[kube-vip as HA, Load Balancer, or both](https://kube-vip.io/docs/installation/static/#kube-vip-as-ha-load-balancer-or-both):
 
 ```yaml
 # HA for control-plane, requires a VIP
@@ -28,16 +36,16 @@ kube_vip_services_enabled: false
 ```
 
 > Note: When using `kube-vip` as LoadBalancer for services,
-[additionnal manual steps](https://kube-vip.chipzoller.dev/docs/usage/cloud-provider/)
+[additional manual steps](https://kube-vip.io/docs/usage/cloud-provider/)
 are needed.
 
-If using [ARP mode](https://kube-vip.chipzoller.dev/docs/installation/static/#arp) :
+If using [ARP mode](https://kube-vip.io/docs/installation/static/#arp) :
 
 ```yaml
 kube_vip_arp_enabled: true
 ```
 
-If using [BGP mode](https://kube-vip.chipzoller.dev/docs/installation/static/#bgp) :
+If using [BGP mode](https://kube-vip.io/docs/installation/static/#bgp) :
 
 ```yaml
 kube_vip_bgp_enabled: true

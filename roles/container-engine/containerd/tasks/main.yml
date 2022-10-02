@@ -3,7 +3,7 @@
   fail:
     msg: "{{ ansible_distribution }} is not supported by containerd."
   when:
-    - ansible_distribution not in ["UnionTech OS Server 20", "Kylin Linux Advanced Server", "Anolis", "OracleLinux", "openEuler", "CentOS", "OracleLinux", "RedHat", "Ubuntu", "Debian", "Fedora", "AlmaLinux", "Rocky", "Amazon", "Flatcar", "Flatcar Container Linux by Kinvolk", "Suse", "openSUSE Leap", "openSUSE Tumbleweed"]
+    - ansible_distribution not in ["CentOS", "OracleLinux", "RedHat", "Ubuntu", "Debian", "Fedora", "AlmaLinux", "Rocky", "Amazon", "Flatcar", "Flatcar Container Linux by Kinvolk", "Suse", "openSUSE Leap", "openSUSE Tumbleweed", "Kylin Linux Advanced Server", "UnionTech OS Server 20", "Anolis", "OracleLinux", "openEuler"]
 
 - name: containerd | Remove any package manager controlled containerd package
   package:
@@ -84,6 +84,15 @@
     mode: 0644
   notify: restart containerd
   when: http_proxy is defined or https_proxy is defined
+
+- name: containerd | Write base_runtime_specs
+  copy:
+    content: "{{ item.value }}"
+    dest: "{{ containerd_cfg_dir }}/{{ item.key }}"
+    owner: "root"
+    mode: 0644
+  with_dict: "{{ containerd_base_runtime_specs | default({}) }}"
+  notify: restart containerd
 
 - name: containerd | Copy containerd config file
   template:

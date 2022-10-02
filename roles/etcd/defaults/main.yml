@@ -66,7 +66,7 @@ etcd_memory_limit: "{% if ansible_memtotal_mb < 4096 %}512M{% else %}0{% endif %
 
 etcd_blkio_weight: 1000
 
-etcd_node_cert_hosts: "{{ groups['k8s_cluster'] | union(groups.get('calico_rr', [])) }}"
+etcd_node_cert_hosts: "{{ groups['k8s_cluster'] }}"
 
 etcd_compaction_retention: "8"
 
@@ -115,3 +115,8 @@ etcd_retries: 4
 # ETCD 3.5.x issue
 # https://groups.google.com/a/kubernetes.io/g/dev/c/B7gJs88XtQc/m/rSgNOzV2BwAJ?utm_medium=email&utm_source=footer
 etcd_experimental_initial_corrupt_check: true
+
+# If this is true, debug information will be displayed but
+# may contain some private data, so it is recommended to set it to false
+# in the production environment.
+unsafe_show_logs: false

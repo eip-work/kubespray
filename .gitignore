@@ -3,7 +3,8 @@
 **/vagrant_ansible_inventory
 *.iml
 temp
-offline-files
+contrib/offline/offline-files
+contrib/offline/offline-files.tar.gz
 .idea
 .vscode
 .tox
@@ -13,6 +14,7 @@ offline-files
 *.tfstate.backup
 .terraform/
 contrib/terraform/aws/credentials.tfvars
+.terraform.lock.hcl
 /ssh-bastion.conf
 **/*.sw[pon]
 *~
@@ -110,3 +112,4 @@ roles/**/molecule/**/__pycache__/
 
 # Temp location used by our scripts
 scripts/tmp/
+tmp.md
