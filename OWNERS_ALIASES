@@ -9,6 +9,7 @@ aliases:
     - oomichi
     - cristicalin
     - liupeng0518
+    - yankay
   kubespray-reviewers:
     - holmsten
     - bozzo
@@ -18,6 +19,8 @@ aliases:
     - cristicalin
     - liupeng0518
     - yankay
+    - cyclinder
+    - mzaian
   kubespray-emeritus_approvers:
     - riverzhang
     - atoms

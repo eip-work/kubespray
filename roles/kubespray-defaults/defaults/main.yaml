@@ -15,13 +15,16 @@ is_fedora_coreos: false
 disable_swap: true
 
 ## Change this to use another Kubernetes version, e.g. a current beta release
-kube_version: v1.24.6
+kube_version: v1.25.6
 
 ## The minimum version working
-kube_version_min_required: v1.23.0
+kube_version_min_required: v1.24.0
 
 ## Kube Proxy mode One of ['iptables','ipvs']
 kube_proxy_mode: ipvs
+
+## The timeout for init first control-plane
+kubeadm_init_timeout: 300s
 
 ## List of kubeadm init phases that should be skipped during control plane setup
 ## By default 'addon/coredns' is skipped
@@ -290,7 +293,7 @@ cri_socket: >-
   {%- if container_manager == 'crio' -%}
   unix:///var/run/crio/crio.sock
   {%- elif container_manager == 'containerd' -%}
-  unix:////var/run/containerd/containerd.sock
+  unix:///var/run/containerd/containerd.sock
   {%- elif container_manager == 'docker' -%}
   unix:///var/run/cri-dockerd.sock
   {%- endif -%}
@@ -409,6 +412,7 @@ ingress_alb_enabled: false
 cert_manager_enabled: false
 expand_persistent_volumes: false
 metallb_enabled: false
+metallb_speaker_enabled: "{{ metallb_enabled }}"
 argocd_enabled: false
 
 ## When OpenStack is used, Cinder version can be explicitly specified if autodetection fails (Fixed in 1.9: https://github.com/kubernetes/kubernetes/issues/50461)
@@ -476,7 +480,7 @@ rbac_enabled: "{{ 'RBAC' in authorization_modes }}"
 kubelet_authentication_token_webhook: true
 
 # When enabled, access to the kubelet API requires authorization by delegation to the API server
-kubelet_authorization_mode_webhook: false
+kubelet_authorization_mode_webhook: true
 
 # kubelet uses certificates for authenticating to the Kubernetes API
 # Automatically generate a new key and request a new certificate from the Kubernetes API as the current certificate approaches expiration
@@ -486,6 +490,12 @@ kubelet_rotate_server_certificates: false
 
 # If set to true, kubelet errors if any of kernel tunables is different than kubelet defaults
 kubelet_protect_kernel_defaults: true
+
+# Set additional sysctl variables to modify Linux kernel variables, for example:
+# additional_sysctl:
+#  - { name: kernel.pid_max, value: 131072 }
+#
+additional_sysctl: []
 
 ## List of key=value pairs that describe feature gates for
 ## the k8s cluster.

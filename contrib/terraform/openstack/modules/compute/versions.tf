@@ -4,5 +4,5 @@ terraform {
       source = "terraform-provider-openstack/openstack"
     }
   }
-  required_version = ">= 0.12.26"
+  required_version = ">= 1.3.0"
 }

@@ -14,7 +14,7 @@ vagrant-validate:
   stage: unit-tests
   tags: [light]
   variables:
-    VAGRANT_VERSION: 2.2.19
+    VAGRANT_VERSION: 2.3.4
   script:
     - ./tests/scripts/vagrant-validate.sh
   except: ['triggers', 'master']
@@ -74,6 +74,13 @@ check-readme-versions:
   image: python:3
   script:
     - tests/scripts/check_readme_versions.sh
+
+check-typo:
+  stage: unit-tests
+  tags: [light]
+  image: python:3
+  script:
+    - tests/scripts/check_typo.sh
 
 ci-matrix:
   stage: unit-tests

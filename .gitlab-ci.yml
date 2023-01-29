@@ -1,5 +1,6 @@
 ---
 stages:
+  - build
   - unit-tests
   - deploy-part1
   - moderator
@@ -8,7 +9,7 @@ stages:
   - deploy-special
 
 variables:
-  KUBESPRAY_VERSION: v2.20.0
+  KUBESPRAY_VERSION: v2.21.0
   FAILFASTCI_NAMESPACE: 'kargo-ci'
   GITLAB_REPOSITORY: 'kargo-ci/kubernetes-sigs-kubespray'
   ANSIBLE_FORCE_COLOR: "true"
@@ -33,8 +34,9 @@ variables:
   ANSIBLE_LOG_LEVEL: "-vv"
   RECOVER_CONTROL_PLANE_TEST: "false"
   RECOVER_CONTROL_PLANE_TEST_GROUPS: "etcd[2:],kube_control_plane[1:]"
-  TERRAFORM_VERSION: 1.0.8
+  TERRAFORM_VERSION: 1.3.7
   ANSIBLE_MAJOR_VERSION: "2.11"
+  PIPELINE_IMAGE: "$CI_REGISTRY_IMAGE/pipeline:${CI_PIPELINE_ID}-${CI_COMMIT_SHORT_SHA}"
 
 before_script:
   - ./tests/scripts/rebase.sh
@@ -46,7 +48,7 @@ before_script:
 .job: &job
   tags:
     - packet
-  image: quay.io/kubespray/kubespray:$KUBESPRAY_VERSION
+  image: $PIPELINE_IMAGE
   artifacts:
     when: always
     paths:
@@ -76,6 +78,7 @@ ci-authorized:
   only: []
 
 include:
+  - .gitlab-ci/build.yml
   - .gitlab-ci/lint.yml
   - .gitlab-ci/shellcheck.yml
   - .gitlab-ci/terraform.yml

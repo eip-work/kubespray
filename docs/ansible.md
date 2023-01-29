@@ -267,7 +267,7 @@ Note: use `--tags` and `--skip-tags` wise and only if you're 100% sure what you'
 ## Bastion host
 
 If you prefer to not make your nodes publicly accessible (nodes with private IPs only),
-you can use a so called *bastion* host to connect to your nodes. To specify and use a bastion,
+you can use a so-called _bastion_ host to connect to your nodes. To specify and use a bastion,
 simply add a line to your inventory, where you have to replace x.x.x.x with the public IP of the
 bastion host.
 
@@ -281,7 +281,7 @@ For more information about Ansible and bastion hosts, read
 
 ## Mitogen
 
-Mitogen support is deprecated, please see [mitogen related docs](/docs/mitogen.md) for useage and reasons for deprecation.
+Mitogen support is deprecated, please see [mitogen related docs](/docs/mitogen.md) for usage and reasons for deprecation.
 
 ## Beyond ansible 2.9
 
@@ -290,7 +290,7 @@ two projects which are now joined under the Ansible umbrella.
 
 Ansible-base (2.10.x branch) will contain just the ansible language implementation while
 ansible modules that were previously bundled into a single repository will be part of the
-ansible 3.x package. Pleasee see [this blog post](https://blog.while-true-do.io/ansible-release-3-0-0/)
+ansible 3.x package. Please see [this blog post](https://blog.while-true-do.io/ansible-release-3-0-0/)
 that explains in detail the need and the evolution plan.
 
 **Note:** this change means that ansible virtual envs cannot be upgraded with `pip install -U`.
