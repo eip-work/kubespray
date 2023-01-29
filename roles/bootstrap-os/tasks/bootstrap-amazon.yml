@@ -1,4 +1,5 @@
 ---
+# 使用 roles/bootstrap-os 替代
 - name: Enable EPEL repo for Amazon Linux
   yum_repository:
     name: epel
