@@ -68,7 +68,7 @@ eviction_hard_control_plane: {}
 kubelet_status_update_frequency: 10s
 
 # kube-vip
-kube_vip_version: v0.5.5
+kube_vip_version: v0.5.8
 
 kube_vip_arp_enabled: false
 kube_vip_interface:
@@ -87,6 +87,7 @@ kube_vip_bgp_peeras: 65000
 kube_vip_bgppeers:
 kube_vip_address:
 kube_vip_enableServicesElection: false
+kube_vip_lb_enable: false
 
 # Requests for load balancer app
 loadbalancer_apiserver_memory_requests: 32M

@@ -15,7 +15,7 @@ is_fedora_coreos: false
 disable_swap: true
 
 ## Change this to use another Kubernetes version, e.g. a current beta release
-kube_version: v1.25.6
+kube_version: v1.26.1
 
 ## The minimum version working
 kube_version_min_required: v1.24.0
@@ -358,9 +358,9 @@ containerd_use_systemd_cgroup: true
 ## example define mirror.registry.io or 172.19.16.11:5000
 ## Port number is also needed if the default HTTPS port is not used.
 # containerd_insecure_registries:
-#   - mirror.registry.io
-#   - 172.19.16.11:5000
-containerd_insecure_registries: []
+#   "mirror.registry.io":"http://mirror.registry.io"
+#   "172.19.16.11:5000":"http://172.19.16.11:5000"
+containerd_insecure_registries: {}
 
 # Containerd conf default dir
 containerd_storage_dir: "/var/lib/containerd"

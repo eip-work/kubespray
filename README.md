@@ -45,7 +45,7 @@ Note: When Ansible is already installed via system packages on the control node,
 Python packages installed via `sudo pip install -r requirements.txt` will go to
 a different directory tree (e.g. `/usr/local/lib/python2.7/dist-packages` on
 Ubuntu) from Ansible's (e.g. `/usr/lib/python2.7/dist-packages/ansible` still on
-buntu). As a consequence, the `ansible-playbook` command will fail with:
+Ubuntu). As a consequence, the `ansible-playbook` command will fail with:
 
 ```raw
 ERROR! no action detected in task. This often indicates a misspelled module name, or incorrect module path.
@@ -150,10 +150,10 @@ Note: Upstart/SysV init based OS types are not supported.
 ## Supported Components
 
 - Core
-  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.25.6
+  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.26.1
   - [etcd](https://github.com/etcd-io/etcd) v3.5.6
   - [docker](https://www.docker.com/) v20.10 (see note)
-  - [containerd](https://containerd.io/) v1.6.15
+  - [containerd](https://containerd.io/) v1.6.16
   - [cri-o](http://cri-o.io/) v1.24 (experimental: see [CRI-O Note](docs/cri-o.md). Only on fedora, ubuntu and centos based OS)
 - Network Plugin
   - [cni-plugins](https://github.com/containernetworking/plugins) v1.2.0
@@ -165,13 +165,13 @@ Note: Upstart/SysV init based OS types are not supported.
   - [kube-router](https://github.com/cloudnativelabs/kube-router) v1.5.1
   - [multus](https://github.com/intel/multus-cni) v3.8
   - [weave](https://github.com/weaveworks/weave) v2.8.1
-  - [kube-vip](https://github.com/kube-vip/kube-vip) v0.5.5
+  - [kube-vip](https://github.com/kube-vip/kube-vip) v0.5.8
 - Application
   - [cert-manager](https://github.com/jetstack/cert-manager) v1.11.0
   - [coredns](https://github.com/coredns/coredns) v1.9.3
   - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v1.5.1
   - [krew](https://github.com/kubernetes-sigs/krew) v0.4.3
-  - [argocd](https://argoproj.github.io/) v2.5.9
+  - [argocd](https://argoproj.github.io/) v2.5.10
   - [helm](https://helm.sh/) v3.10.3
   - [metallb](https://metallb.universe.tf/)  v0.12.1
   - [registry](https://github.com/distribution/distribution) v2.8.1
@@ -199,7 +199,7 @@ Note: Upstart/SysV init based OS types are not supported.
 - If using IPv6 for pods and services, the target servers are configured to allow **IPv6 forwarding**.
 - The **firewalls are not managed**, you'll need to implement your own rules the way you used to.
     in order to avoid any issue during deployment you should disable your firewall.
-- If kubespray is ran from non-root user account, correct privilege escalation method
+- If kubespray is run from non-root user account, correct privilege escalation method
     should be configured in the target servers. Then the `ansible_become` flag
     or command parameters `--become or -b` should be specified.
 
